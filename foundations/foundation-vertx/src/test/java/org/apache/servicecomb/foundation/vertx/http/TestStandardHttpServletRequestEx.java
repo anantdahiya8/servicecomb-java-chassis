@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.List;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -131,7 +132,9 @@ public class TestStandardHttpServletRequestEx {
       }
     };
 
-    MatcherAssert.assertThat(Collections.list(requestEx.getParameterNames()), Matchers.contains("p1", "p2"));
+    List<String> paramList = Collections.list(requestEx.getParameterNames());
+    Collections.sort(paramList);
+    MatcherAssert.assertThat(paramList, Matchers.contains("p1", "p2"));
     MatcherAssert.assertThat(requestEx.getParameterValues("p1"), Matchers.arrayContaining("v1-1", "v1-2", "v1-3"));
     Assertions.assertEquals("v1-1", requestEx.getParameter("p1"));
   }
@@ -148,7 +151,8 @@ public class TestStandardHttpServletRequestEx {
     Assertions.assertEquals("v2", requestEx.getParameter("k2"));
 
     Assertions.assertSame(parameterMap, requestEx.getParameterMap());
-
-    MatcherAssert.assertThat(Collections.list(requestEx.getParameterNames()), Matchers.contains("k1", "k2"));
+    List<String> paramList = Collections.list(requestEx.getParameterNames());
+    Collections.sort(paramList);
+    MatcherAssert.assertThat(paramList, Matchers.contains("k1", "k2"));
   }
 }
