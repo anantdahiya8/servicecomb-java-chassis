@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletInputStream;
@@ -490,7 +491,8 @@ public class TestVertxServerRequestToHttpServletRequest {
     Assertions.assertEquals("v2", request.getParameter("k2"));
 
     Assertions.assertSame(parameterMap, request.getParameterMap());
-
-    MatcherAssert.assertThat(Collections.list(request.getParameterNames()), Matchers.contains("k1", "k2"));
+    List<String> paramList = Collections.list(request.getParameterNames());
+    Collections.sort(paramList);
+    MatcherAssert.assertThat(paramList, Matchers.contains("k1", "k2"));
   }
 }

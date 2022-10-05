@@ -18,6 +18,7 @@
 package org.apache.servicecomb.foundation.vertx.http;
 
 import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,7 +40,9 @@ public class TestAbstractHttpServletRequest {
     MatcherAssert.assertThat(Collections.list(request.getAttributeNames()), Matchers.contains(key));
 
     request.setAttribute("a2", "v");
-    MatcherAssert.assertThat(Collections.list(request.getAttributeNames()), Matchers.contains(key, "a2"));
+    List<String> attributeList = Collections.list(request.getAttributeNames());
+    Collections.sort(Collections.list(request.getAttributeNames()));
+    MatcherAssert.assertThat(attributeList, Matchers.contains(key, "a2"));
 
     request.removeAttribute(key);
     Assertions.assertNull(request.getAttribute(key));
