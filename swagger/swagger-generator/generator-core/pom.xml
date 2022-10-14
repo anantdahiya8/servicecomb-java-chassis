@@ -31,6 +31,7 @@
       <groupId>io.swagger</groupId>
       <artifactId>swagger-core</artifactId>
     </dependency>
+
     <dependency>
       <groupId>org.apache.servicecomb</groupId>
       <artifactId>foundation-config</artifactId>
@@ -43,7 +44,6 @@
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
     </dependency>
-
     <dependency>
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api</artifactId>
@@ -71,6 +71,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.skyscreamer</groupId>
+      <artifactId>jsonassert</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.apache.servicecomb</groupId>
       <artifactId>foundation-test-scaffolding</artifactId>
     </dependency>
@@ -78,6 +83,10 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.skyscreamer</groupId>
+      <artifactId>jsonassert</artifactId>
     </dependency>
   </dependencies>
 </project>
