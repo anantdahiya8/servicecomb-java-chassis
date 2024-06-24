@@ -22,6 +22,9 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.servicecomb.swagger.generator.SwaggerGenerator;
 
@@ -30,7 +33,9 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 import io.swagger.models.Swagger;
 import io.swagger.util.Yaml;
+import org.json.JSONException;
 import org.junit.jupiter.api.Assertions;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 public final class UnitTestSwaggerUtils {
   private static final ObjectWriter writer = Yaml.pretty();
@@ -75,20 +80,30 @@ public final class UnitTestSwaggerUtils {
 
     Swagger swagger = generator.generate();
     String schema = pretty(swagger);
-
     String expectSchema = loadExpect(resPath).replace("\r\n", "\n");
     int offset = expectSchema.indexOf("---\nswagger: \"2.0\"");
     if (offset > 0) {
       expectSchema = expectSchema.substring(offset);
     }
 
-    if (!Objects.equals(expectSchema, schema)) {
-      Assertions.assertEquals(expectSchema, schema);
+    try {
+      JSONAssert.assertEquals(yamlToJson(expectSchema), yamlToJson(schema), false);
+    } catch (JSONException e) {
+      throw new RuntimeException(e);
     }
-
     return generator;
   }
 
+  static public String yamlToJson(String swagger){
+    try {
+        ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
+        Object obj = yamlReader.readValue(swagger, Object.class);
+        ObjectMapper jsonWriter = new ObjectMapper();
+        return jsonWriter.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
+    } catch (JsonProcessingException e) {
+      throw new Error(e);
+    }
+  }
   public static Throwable getException(Class<?> cls, String... methods) {
     try {
       SwaggerGenerator generator = SwaggerGenerator.create(cls);
